@@ -1,0 +1,15 @@
+{
+	"name": "Section Collapse",
+	"description": "Adds a toggle switch to section headers on data entry and survey forms that can be used for showing and hiding all fields within the section.",
+	"namespace": "MCRI\\SectionCollapse",
+	"authors": [
+		{
+			"name": "Luke Stevens",
+			"email": "luke.stevens@mcri.edu.au",
+			"institution": "Murdoch Children's Research Institute"
+		}
+	],
+    "framework-version": 12,
+	"system-settings": [ ],
+	"project-settings": [ ]
+}
