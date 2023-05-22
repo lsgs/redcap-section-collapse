@@ -11,16 +11,19 @@ class SectionCollapse extends AbstractExternalModule
 {
     protected $isSurvey = false;
     protected $instrument = '';
+    protected $hiddenClass = '-';
 
     public function redcap_data_entry_form($project_id, $record, $instrument, $event_id, $group_id, $repeat_instance) {
         $this->isSurvey = false;
         $this->instrument = $instrument;
+        $this->hiddenClass = '@HIDDEN-FORM';
         $this->pageTop();
     }
 
     public function redcap_survey_page($project_id, $record, $instrument, $event_id, $group_id, $survey_hash, $response_id, $repeat_instance) {
         $this->isSurvey = true;
         $this->instrument = $instrument;
+        $this->hiddenClass = '@HIDDEN-SURVEY';
         $this->pageTop();
     }
 
@@ -72,9 +75,9 @@ class SectionCollapse extends AbstractExternalModule
                     var collapse = $(this).data('collapse');
                     var collapseAction = (collapse) ? 'collapse' : 'expand';
                     var sectionId = $(this).data('section');
-                    var sectionNum = (sectionId) ? ''+sectionId : 'all';
-                    console.log(collapseAction+' '+sectionNum);
+                    
                     if (sectionId===0) { // expand/collapse all
+                        console.log(collapseAction+' all');
                         for (var i = 0; i < module.headerCount; i++) {
                             var sectionBtn = $('button[data-section='+(i+1)+']').first();
                             if ($(sectionBtn).data('collapse') == collapse) {
@@ -83,13 +86,25 @@ class SectionCollapse extends AbstractExternalModule
                             }
                         }
                     } else {
+                        console.log(collapseAction+' '+sectionId);
                         if (collapse) {
                             $(this).data('collapse',0).html(module.icon_expand);
                             $('.em-section-collapse-field.em-section-collapse-'+sectionId).hide();
                         } else { // expand
                             $(this).data('collapse',1).html(module.icon_collapse);
-                            $('.em-section-collapse-field.em-section-collapse-'+sectionId).show();
-                            doBranching();
+
+                            // expand all sections
+                            $('.em-section-collapse-field').not('.\\@HIDDEN').not('.\\<?=$this->hiddenClass?>').show();
+                            doBranching(); // ensure only those fields in the current section that should be visible are visible
+                            // now ensure all sections that should be collapsed get collapsed again
+                            for (var i = 0; i < module.headerCount; i++) {
+                                if ((i+1)===sectionId) continue;
+                                var btn = $('button[data-section='+(i+1)+']').first();
+                                var collapseState = $(btn).data('collapse');
+                                if (collapseState === 0) {
+                                    $('.em-section-collapse-field.em-section-collapse-'+(i+1)).hide();
+                                }
+                            }
                         }
                     }                    
                 };
@@ -114,7 +129,6 @@ class SectionCollapse extends AbstractExternalModule
                         .not('[id$=__-tr]')
                         .each(function(){
                             var thisid = $(this).attr('id');
-                            //console.log(thisid);
                             var isHeader = (thisid.endsWith('-sh-tr'));
                             if (isHeader) {
                                 module.headerCount++;
