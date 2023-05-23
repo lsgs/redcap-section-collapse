@@ -57,6 +57,22 @@ class SectionCollapse extends AbstractExternalModule
             $(function(){
                 var module = <?=$this->getJavascriptModuleObjectName()?>;
                 module.headerCount = 0;
+
+                module.doBranching = doBranching; // i.e. capture the built-in funciton doBranching()
+                doBranching = function() { // now override it with our own version
+                    // expand all sections
+                    $('.em-section-collapse-field').not('.\\@HIDDEN').not('.\\<?=$this->hiddenClass?>').show();
+                    // run the regular branching to ensure fields that should be hidden get hidden
+                    module.doBranching();
+                    // now ensure all sections that should be collapsed get collapsed again
+                    for (var i = 0; i < module.headerCount; i++) {
+                        var btn = $('button[data-section='+(i+1)+']').first();
+                        var collapseState = $(btn).data('collapse');
+                        if (collapseState === 0) {
+                            $('.em-section-collapse-field.em-section-collapse-'+(i+1)).hide();
+                        }
+                    }
+                };
                 
                 module.icon_expand = '<i class="fas fa-angle-down"></i>';
                 module.icon_collapse = '<i class="fas fa-angle-up"></i>';
@@ -92,19 +108,7 @@ class SectionCollapse extends AbstractExternalModule
                             $('.em-section-collapse-field.em-section-collapse-'+sectionId).hide();
                         } else { // expand
                             $(this).data('collapse',1).html(module.icon_collapse);
-
-                            // expand all sections
-                            $('.em-section-collapse-field').not('.\\@HIDDEN').not('.\\<?=$this->hiddenClass?>').show();
-                            doBranching(); // ensure only those fields in the current section that should be visible are visible
-                            // now ensure all sections that should be collapsed get collapsed again
-                            for (var i = 0; i < module.headerCount; i++) {
-                                if ((i+1)===sectionId) continue;
-                                var btn = $('button[data-section='+(i+1)+']').first();
-                                var collapseState = $(btn).data('collapse');
-                                if (collapseState === 0) {
-                                    $('.em-section-collapse-field.em-section-collapse-'+(i+1)).hide();
-                                }
-                            }
+                            doBranching();
                         }
                     }                    
                 };
