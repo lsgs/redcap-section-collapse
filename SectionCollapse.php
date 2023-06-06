@@ -52,28 +52,15 @@ class SectionCollapse extends AbstractExternalModule
             #em-section-collapse-btn-top-accordion {
                 display: none;
             }
+            .em-section-collapse-tr-collapsed {
+                visibility: collapse;
+            }
         </style>
         <script type="text/javascript">
             $(function(){
                 var module = <?=$this->getJavascriptModuleObjectName()?>;
                 module.headerCount = 0;
 
-                module.doBranching = doBranching; // i.e. capture the built-in funciton doBranching()
-                doBranching = function() { // now override it with our own version
-                    // expand all sections
-                    $('.em-section-collapse-field').not('.\\@HIDDEN').not('.\\<?=$this->hiddenClass?>').show();
-                    // run the regular branching to ensure fields that should be hidden get hidden
-                    module.doBranching();
-                    // now ensure all sections that should be collapsed get collapsed again
-                    for (var i = 0; i < module.headerCount; i++) {
-                        var btn = $('button[data-section='+(i+1)+']').first();
-                        var collapseState = $(btn).data('collapse');
-                        if (collapseState === 0) {
-                            $('.em-section-collapse-field.em-section-collapse-'+(i+1)).hide();
-                        }
-                    }
-                };
-                
                 module.icon_expand = '<i class="fas fa-angle-down"></i>';
                 module.icon_collapse = '<i class="fas fa-angle-up"></i>';
                 module.icon_expand_all = '<i class="fas fa-angle-double-down"></i>';
@@ -81,10 +68,10 @@ class SectionCollapse extends AbstractExternalModule
                 module.icon_accordion_off = '<i class="fas fa-toggle-off"></i>';
                 module.icon_accordion_on = '<i class="fas fa-toggle-on"></i>';
                 
-                module.btn_section       = '<button type="button" class="mx-1 px-2 py-0 btn btn-xs btn-outline-secondary em-section-collapse-btn em-section-collapse-btn-sec" data-section=-1 data-collapse=1>'+module.icon_collapse+'</button>'
-                module.btn_top_collapse  = '<button type="button" class="mx-1 px-2 py-0 btn btn-xs btn-outline-secondary em-section-collapse-btn em-section-collapse-btn-top" data-section=0 data-collapse=1 id="em-section-collapse-btn-top-collapse">'+module.icon_collapse_all+'</button>';
-                module.btn_top_expand    = '<button type="button" class="mx-1 px-2 py-0 btn btn-xs btn-outline-secondary em-section-collapse-btn em-section-collapse-btn-top" data-section=0 data-collapse=0 id="em-section-collapse-btn-top-expand">'+module.icon_expand_all+'</button>';
-                module.btn_top_accordion = '<button type="button" class="mx-1 px-2 py-0 btn btn-xs btn-outline-secondary em-section-collapse-btn em-section-collapse-btn-top" data-accordion-mode=0 id="em-section-collapse-btn-top-accordion">'+module.icon_accordion_off+'</button>';
+                module.btn_section       = '<button type="button" class="mx-1 px-2 py-0 btn btn-xs btn-outline-secondary d-print-none em-section-collapse-btn em-section-collapse-btn-sec" data-section=-1 data-collapse=1>'+module.icon_collapse+'</button>'
+                module.btn_top_collapse  = '<button type="button" class="mx-1 px-2 py-0 btn btn-xs btn-outline-secondary d-print-none em-section-collapse-btn em-section-collapse-btn-top" data-section=0 data-collapse=1 id="em-section-collapse-btn-top-collapse">'+module.icon_collapse_all+'</button>';
+                module.btn_top_expand    = '<button type="button" class="mx-1 px-2 py-0 btn btn-xs btn-outline-secondary d-print-none em-section-collapse-btn em-section-collapse-btn-top" data-section=0 data-collapse=0 id="em-section-collapse-btn-top-expand">'+module.icon_expand_all+'</button>';
+                module.btn_top_accordion = '<button type="button" class="mx-1 px-2 py-0 btn btn-xs btn-outline-secondary d-print-none em-section-collapse-btn em-section-collapse-btn-top" data-accordion-mode=0 id="em-section-collapse-btn-top-accordion">'+module.icon_accordion_off+'</button>';
                 module.collapse_top_container = '<div class="my-1 em-section-collapse-all">'+module.btn_top_accordion+module.btn_top_collapse+module.btn_top_expand+'</div>';
                 
                 module.action = function() {
@@ -105,10 +92,10 @@ class SectionCollapse extends AbstractExternalModule
                         console.log(collapseAction+' '+sectionId);
                         if (collapse) {
                             $(this).data('collapse',0).html(module.icon_expand);
-                            $('.em-section-collapse-field.em-section-collapse-'+sectionId).hide();
+                            $('.em-section-collapse-field.em-section-collapse-'+sectionId).addClass('em-section-collapse-tr-collapsed');
                         } else { // expand
                             $(this).data('collapse',1).html(module.icon_collapse);
-                            doBranching();
+                            $('.em-section-collapse-field.em-section-collapse-'+sectionId).removeClass('em-section-collapse-tr-collapsed');
                         }
                     }                    
                 };
