@@ -10,6 +10,46 @@
 		}
 	],
     "framework-version": 12,
+    "auth-ajax-actions": [ "user-mode-preference" ],
 	"system-settings": [ ],
-	"project-settings": [ ]
+	"project-settings": [
+        {
+            "key": "project-default",
+            "name": "Project default option<br><span class=\"text-muted\">Default is both modes available.</span>",
+            "required": false,
+            "type": "dropdown",
+            "choices": [
+                { "value": "a", "name": "Accordion mode only" },
+                { "value": "b", "name": "By section mode only" },
+                { "value": "d", "name": "Disabled" }
+            ]
+        },
+        {
+            "key": "instrument-override",
+            "name": "Instrument-level override",
+            "required": false,
+            "type": "sub_settings",
+            "repeatable": true,
+            "sub_settings": [
+                {
+                    "name": "Instrument",
+                    "key": "instrument",
+                    "required": true,
+                    "type": "form-list"
+                },
+                {
+                    "key": "instrument-mode",
+                    "name": "Instrument option<br><span class=\"text-muted\">(To override project default mode, above)</span>",
+                    "required": true,
+                    "type": "dropdown",
+                    "choices": [
+                        { "value": "ab", "name": "Allow both" },
+                        { "value": "a", "name": "Accordion mode only" },
+                        { "value": "b", "name": "By section mode only" },
+                        { "value": "d", "name": "Disabled" }
+                    ]
+                }
+            ]
+        }
+    ]
 }
