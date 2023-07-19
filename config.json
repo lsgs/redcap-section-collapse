@@ -1,6 +1,6 @@
 {
 	"name": "Section Collapse",
-	"description": "Adds a toggle switch to section headers on data entry and survey forms that can be used for showing and hiding all fields within the section.",
+	"description": "Adds a toggle switches to section headers on data entry and survey forms that can be used for showing and hiding all fields within each section.<br>Demo: <a target=\"_blank\" href=\"https://redcap.link/section-collapse\">https://redcap.link/section-collapse</a>",
 	"namespace": "MCRI\\SectionCollapse",
 	"authors": [
 		{
@@ -10,6 +10,9 @@
 		}
 	],
     "framework-version": 12,
+    "compatibility": {
+        "redcap-version-min": "13.1.2"
+    },
     "auth-ajax-actions": [ "user-mode-preference" ],
 	"system-settings": [ ],
 	"project-settings": [

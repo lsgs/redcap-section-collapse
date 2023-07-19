@@ -7,7 +7,9 @@ Luke Stevens, Murdoch Children's Research Institute https://www.mcri.edu.au
 ********************************************************************************
 ## Summary
 
-Adds a toggle switch to section headers on data entry and survey forms that can be used for showing and hiding all fields within the section.
+Adds a toggle switches to section headers on data entry and survey forms that can be used for showing and hiding all fields within each section.
+
+Demo: [https://redcap.link/section-collapse](https://redcap.link/section-collapse)
 
 ********************************************************************************
 ## Modes

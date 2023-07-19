@@ -48,7 +48,7 @@ class SectionCollapse extends AbstractExternalModule
         } else {
             $userModePref = $this->getUserSetting(static::USER_PREF_ACTION) ?? '';
         }
-        $userModePref = (str_contains($modeOptions, $userModePref)) ? $userModePref : '';
+        $userModePref = (str_contains($modeOptions, $userModePref)) ? $this->escape($userModePref) : '';
 
         $this->initializeJavascriptModuleObject();
         ?>
